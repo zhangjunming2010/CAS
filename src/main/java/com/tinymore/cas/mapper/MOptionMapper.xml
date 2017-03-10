@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinymore.cas.dao.MOptionMapper">
+  <resultMap id="BaseResultMap" type="com.tinymore.cas.model.MOption">
+    <id column="co_id" jdbcType="VARCHAR" property="coId" />
+    <result column="cq_id" jdbcType="VARCHAR" property="cqId" />
+    <result column="co_title" jdbcType="VARCHAR" property="coTitle" />
+    <result column="co_score" jdbcType="INTEGER" property="coScore" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    co_id, cq_id, co_title, co_score
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_option
+    where co_id = #{coId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCqId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_option
+    where cq_id = #{cqId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cas_option
+    where co_id = #{coId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByCqId" parameterType="java.lang.String">
+    delete from cas_option
+    where cq_id = #{cqId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tinymore.cas.model.MOption">
+    insert into cas_option (co_id, cq_id, co_title, 
+      co_score)
+    values (#{coId,jdbcType=VARCHAR}, #{cqId,jdbcType=VARCHAR}, #{coTitle,jdbcType=VARCHAR}, 
+      #{coScore,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tinymore.cas.model.MOption">
+    insert into cas_option
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="coId != null">
+        co_id,
+      </if>
+      <if test="cqId != null">
+        cq_id,
+      </if>
+      <if test="coTitle != null">
+        co_title,
+      </if>
+      <if test="coScore != null">
+        co_score,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="coId != null">
+        #{coId,jdbcType=VARCHAR},
+      </if>
+      <if test="cqId != null">
+        #{cqId,jdbcType=VARCHAR},
+      </if>
+      <if test="coTitle != null">
+        #{coTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="coScore != null">
+        #{coScore,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tinymore.cas.model.MOption">
+    update cas_option
+    <set>
+      <if test="cqId != null">
+        cq_id = #{cqId,jdbcType=VARCHAR},
+      </if>
+      <if test="coTitle != null">
+        co_title = #{coTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="coScore != null">
+        co_score = #{coScore,jdbcType=INTEGER},
+      </if>
+    </set>
+    where co_id = #{coId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tinymore.cas.model.MOption">
+    update cas_option
+    set cq_id = #{cqId,jdbcType=VARCHAR},
+      co_title = #{coTitle,jdbcType=VARCHAR},
+      co_score = #{coScore,jdbcType=INTEGER}
+    where co_id = #{coId,jdbcType=VARCHAR}
+  </update>
+</mapper>

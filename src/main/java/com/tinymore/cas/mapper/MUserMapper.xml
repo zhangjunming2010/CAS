@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinymore.cas.dao.MUserMapper">
+  <resultMap id="BaseResultMap" type="com.tinymore.cas.model.MUser">
+    <id column="cu_id" jdbcType="VARCHAR" property="cuId" />
+    <result column="cu_account" jdbcType="VARCHAR" property="cuAccount" />
+    <result column="cu_password" jdbcType="VARCHAR" property="cuPassword" />
+    <result column="cu_type" jdbcType="VARCHAR" property="cuType" />
+    <result column="cu_email" jdbcType="VARCHAR" property="cuEmail" />
+    <result column="cu_status" jdbcType="BIT" property="cuStatus" />
+    <result column="cu_role" jdbcType="INTEGER" property="cuRole" />
+    <result column="cu_name" jdbcType="VARCHAR" property="cuName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cu_id, cu_account, cu_password, cu_type, cu_email, cu_status,cu_role,cu_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_user
+    where cu_id = #{cuId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByAccountAndPassword" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_user
+    where cu_account = #{cuAccount,jdbcType=VARCHAR}
+    and cu_password = #{cuPassword,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_user
+    where cu_account = #{cuAccount,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_user
+    where 1=1
+	<if test="cuName != 'ALL'">
+        and cu_name like CONCAT(CONCAT('%', #{cuName,jdbcType=VARCHAR}), '%')
+    </if>
+    <if test="cuStatus != -1">
+        and cu_status = #{cuStatus,jdbcType=BIT}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cas_user
+    where cu_id = #{cuId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tinymore.cas.model.MUser">
+    insert into cas_user (cu_id, cu_account, cu_password, 
+      cu_type, cu_email, cu_status,cu_role,cu_name
+      )
+    values (#{cuId,jdbcType=VARCHAR}, #{cuAccount,jdbcType=VARCHAR}, #{cuPassword,jdbcType=VARCHAR}, 
+      #{cuType,jdbcType=VARCHAR}, #{cuEmail,jdbcType=VARCHAR}, #{cuStatus,jdbcType=BIT}, #{cuRole,jdbcType=INTEGER},
+      #{cuName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tinymore.cas.model.MUser">
+    insert into cas_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cuId != null">
+        cu_id,
+      </if>
+      <if test="cuAccount != null">
+        cu_account,
+      </if>
+      <if test="cuPassword != null">
+        cu_password,
+      </if>
+      <if test="cuType != null">
+        cu_type,
+      </if>
+      <if test="cuEmail != null">
+        cu_email,
+      </if>
+      <if test="cuName != null">
+        cu_name,
+      </if>
+      <if test="cuStatus != null">
+        cu_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cuId != null">
+        #{cuId,jdbcType=VARCHAR},
+      </if>
+      <if test="cuAccount != null">
+        #{cuAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="cuPassword != null">
+        #{cuPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="cuType != null">
+        #{cuType,jdbcType=VARCHAR},
+      </if>
+      <if test="cuEmail != null">
+        #{cuEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="cuName != null">
+        #{cuName,jdbcType=VARCHAR},
+      </if>
+      <if test="cuStatus != null">
+        #{cuStatus,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tinymore.cas.model.MUser">
+    update cas_user
+    <set>
+      <if test="cuAccount != null">
+        cu_account = #{cuAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="cuPassword != null">
+        cu_password = #{cuPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="cuType != null">
+        cu_type = #{cuType,jdbcType=VARCHAR},
+      </if>
+      <if test="cuEmail != null">
+        cu_email = #{cuEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="cuStatus != null">
+        cu_status = #{cuStatus,jdbcType=BIT},
+      </if>
+      <if test="cuName != null">
+    	cu_name =  #{cuName,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where cu_id = #{cuId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tinymore.cas.model.MUser">
+    update cas_user
+    set cu_account = #{cuAccount,jdbcType=VARCHAR},
+      cu_password = #{cuPassword,jdbcType=VARCHAR},
+      cu_type = #{cuType,jdbcType=VARCHAR},
+      cu_email = #{cuEmail,jdbcType=VARCHAR},
+      cu_status = #{cuStatus,jdbcType=BIT},
+      cu_name = #{cuName,jdbcType=VARCHAR},
+      cu_role = #{cuRole,jdbcType=INTEGER}
+    where cu_id = #{cuId,jdbcType=VARCHAR}
+  </update>
+</mapper>

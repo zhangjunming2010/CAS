@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinymore.cas.dao.MQuestionMapper">
+  <resultMap id="BaseResultMap" type="com.tinymore.cas.model.MQuestion">
+    <id column="cq_id" jdbcType="VARCHAR" property="cqId" />
+    <result column="ct_id" jdbcType="VARCHAR" property="ctId" />
+    <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+    <result column="cq_title" jdbcType="VARCHAR" property="cqTitle" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cq_id, ct_id, cc_id, cq_title
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_question
+    where cq_id = #{cqId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByTitle" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_question
+    where cq_title = #{cqTitle,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <!-- <include refid="Base_Column_List" /> -->
+    q.cq_id,q.cq_title,t.ct_name as ct_id,c.cc_name as cc_id
+    from cas_question q,cas_type t,cas_category c  where 1 = 1
+    and q.ct_id = t.ct_id
+    and q.cc_id = c.cc_id
+    <if test="searchKey != 'ALL'">
+        and cq_title like CONCAT(CONCAT('%', #{searchKey}), '%')
+    </if>
+    <if test="ctId != 'ALL'">
+    	
+        and q.ct_id = #{ctId}
+    </if>
+    <if test="ccId != 'ALL'">
+    	
+        and q.cc_id = #{ccId}
+    </if>
+    order by cq_title;
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cas_question
+    where cq_id = #{cqId,jdbcType=VARCHAR}
+  </delete> 
+  <insert id="insert" parameterType="com.tinymore.cas.model.MQuestion">
+    insert into cas_question (cq_id, ct_id, cc_id, 
+      cq_title)
+    values (#{cqId,jdbcType=VARCHAR}, #{ctId,jdbcType=VARCHAR}, #{ccId,jdbcType=VARCHAR}, 
+      #{cqTitle,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tinymore.cas.model.MQuestion">
+    insert into cas_question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cqId != null">
+        cq_id,
+      </if>
+      <if test="ctId != null">
+        ct_id,
+      </if>
+      <if test="ccId != null">
+        cc_id,
+      </if>
+      <if test="cqTitle != null">
+        cq_title,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cqId != null">
+        #{cqId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctId != null">
+        #{ctId,jdbcType=VARCHAR},
+      </if>
+      <if test="ccId != null">
+        #{ccId,jdbcType=VARCHAR},
+      </if>
+      <if test="cqTitle != null">
+        #{cqTitle,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tinymore.cas.model.MQuestion">
+    update cas_question
+    <set>
+      <if test="ctId != null">
+        ct_id = #{ctId,jdbcType=VARCHAR},
+      </if>
+      <if test="ccId != null">
+        cc_id = #{ccId,jdbcType=VARCHAR},
+      </if>
+      <if test="cqTitle != null">
+        cq_title = #{cqTitle,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cq_id = #{cqId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tinymore.cas.model.MQuestion">
+    update cas_question
+    set ct_id = #{ctId,jdbcType=VARCHAR},
+      cc_id = #{ccId,jdbcType=VARCHAR},
+      cq_title = #{cqTitle,jdbcType=VARCHAR}
+    where cq_id = #{cqId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinymore.cas.dao.MEvaluationMapper">
+  <resultMap id="BaseResultMap" type="com.tinymore.cas.model.MEvaluation">
+    <id column="ce_id" jdbcType="VARCHAR" property="ceId" />
+    <result column="ce_title" jdbcType="VARCHAR" property="ceTitle" />
+    <result column="ce_status" jdbcType="BIT" property="ceStatus" />
+    <result column="ce_des" jdbcType="VARCHAR" property="ceDes" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ce_id, ce_title, ce_status, ce_des
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_evaluation
+    where ce_id = #{ceId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByTitle" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_evaluation
+    where ce_title = #{ceTitle,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_evaluation
+    where 1 = 1
+    <if test="ceTitle != 'ALL'">
+        and ce_title like CONCAT(CONCAT('%', #{ceTitle,jdbcType=VARCHAR}), '%')
+    </if>
+    <if test="ceStatus != -1">
+        and ce_status = #{ceStatus,jdbcType=BIT}
+    </if>
+    order by ce_title
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cas_evaluation
+    where ce_id = #{ceId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tinymore.cas.model.MEvaluation">
+    insert into cas_evaluation (ce_id, ce_title, ce_status, 
+      ce_des)
+    values (#{ceId,jdbcType=VARCHAR}, #{ceTitle,jdbcType=VARCHAR}, #{ceStatus,jdbcType=BIT}, 
+      #{ceDes,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tinymore.cas.model.MEvaluation">
+    insert into cas_evaluation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ceId != null">
+        ce_id,
+      </if>
+      <if test="ceTitle != null">
+        ce_title,
+      </if>
+      <if test="ceStatus != null">
+        ce_status,
+      </if>
+      <if test="ceDes != null">
+        ce_des,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ceId != null">
+        #{ceId,jdbcType=VARCHAR},
+      </if>
+      <if test="ceTitle != null">
+        #{ceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="ceStatus != null">
+        #{ceStatus,jdbcType=BIT},
+      </if>
+      <if test="ceDes != null">
+        #{ceDes,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tinymore.cas.model.MEvaluation">
+    update cas_evaluation
+    <set>
+      <if test="ceTitle != null">
+        ce_title = #{ceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="ceStatus != null">
+        ce_status = #{ceStatus,jdbcType=BIT},
+      </if>
+      <if test="ceDes != null">
+        ce_des = #{ceDes,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ce_id = #{ceId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tinymore.cas.model.MEvaluation">
+    update cas_evaluation
+    set ce_title = #{ceTitle,jdbcType=VARCHAR},
+      ce_status = #{ceStatus,jdbcType=BIT},
+      ce_des = #{ceDes,jdbcType=VARCHAR}
+    where ce_id = #{ceId,jdbcType=VARCHAR}
+  </update>
+</mapper>

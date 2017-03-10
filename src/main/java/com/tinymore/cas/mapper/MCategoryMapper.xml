@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinymore.cas.dao.MCategoryMapper">
+  <resultMap id="BaseResultMap" type="com.tinymore.cas.model.MCategory">
+    <id column="cc_id" jdbcType="VARCHAR" property="ccId" />
+    <result column="cc_name" jdbcType="VARCHAR" property="ccName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cc_id, cc_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_category
+    where cc_id = #{ccId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCcname" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_category
+    where cc_name = #{ccName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_category 
+    <if test="searchKey != 'ALL'">
+        where cc_name like CONCAT(CONCAT('%', #{searchKey}), '%')
+    </if>
+    order by cc_name;
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cas_category
+    where cc_id = #{ccId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tinymore.cas.model.MCategory">
+    insert into cas_category (cc_id, cc_name)
+    values (#{ccId,jdbcType=VARCHAR}, #{ccName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tinymore.cas.model.MCategory">
+    insert into cas_category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ccId != null">
+        cc_id,
+      </if>
+      <if test="ccName != null">
+        cc_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ccId != null">
+        #{ccId,jdbcType=VARCHAR},
+      </if>
+      <if test="ccName != null">
+        #{ccName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tinymore.cas.model.MCategory">
+    update cas_category
+    <set>
+      <if test="ccName != null">
+        cc_name = #{ccName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cc_id = #{ccId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tinymore.cas.model.MCategory">
+    update cas_category
+    set cc_name = #{ccName,jdbcType=VARCHAR}
+    where cc_id = #{ccId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinymore.cas.dao.MEvaluationAssessMapper">
+  <resultMap id="BaseResultMap" type="com.tinymore.cas.model.MEvaluationAssess">
+    <id column="cea_id" jdbcType="VARCHAR" property="ceaId" />
+    <result column="ce_id" jdbcType="VARCHAR" property="ceId" />
+    <result column="cea_min" jdbcType="INTEGER" property="ceaMin" />
+    <result column="cea_max" jdbcType="INTEGER" property="ceaMax" />
+    <result column="cea_desc" jdbcType="VARCHAR" property="ceaDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cea_id, ce_id, cea_min, cea_max, cea_desc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_evaluation_assess
+    where cea_id = #{ceaId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCeId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cas_evaluation_assess
+    where ce_id = #{ceId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cas_evaluation_assess
+    where cea_id = #{ceaId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByCeId" parameterType="java.lang.String">
+    delete from cas_evaluation_assess
+    where ce_id = #{ceId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tinymore.cas.model.MEvaluationAssess">
+    insert into cas_evaluation_assess (cea_id, ce_id, cea_min, 
+      cea_max, cea_desc)
+    values (#{ceaId,jdbcType=VARCHAR}, #{ceId,jdbcType=VARCHAR}, #{ceaMin,jdbcType=INTEGER}, 
+      #{ceaMax,jdbcType=INTEGER}, #{ceaDesc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tinymore.cas.model.MEvaluationAssess">
+    insert into cas_evaluation_assess
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ceaId != null">
+        cea_id,
+      </if>
+      <if test="ceId != null">
+        ce_id,
+      </if>
+      <if test="ceaMin != null">
+        cea_min,
+      </if>
+      <if test="ceaMax != null">
+        cea_max,
+      </if>
+      <if test="ceaDesc != null">
+        cea_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ceaId != null">
+        #{ceaId,jdbcType=VARCHAR},
+      </if>
+      <if test="ceId != null">
+        #{ceId,jdbcType=VARCHAR},
+      </if>
+      <if test="ceaMin != null">
+        #{ceaMin,jdbcType=INTEGER},
+      </if>
+      <if test="ceaMax != null">
+        #{ceaMax,jdbcType=INTEGER},
+      </if>
+      <if test="ceaDesc != null">
+        #{ceaDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tinymore.cas.model.MEvaluationAssess">
+    update cas_evaluation_assess
+    <set>
+      <if test="ceId != null">
+        ce_id = #{ceId,jdbcType=VARCHAR},
+      </if>
+      <if test="ceaMin != null">
+        cea_min = #{ceaMin,jdbcType=INTEGER},
+      </if>
+      <if test="ceaMax != null">
+        cea_max = #{ceaMax,jdbcType=INTEGER},
+      </if>
+      <if test="ceaDesc != null">
+        cea_desc = #{ceaDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cea_id = #{ceaId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tinymore.cas.model.MEvaluationAssess">
+    update cas_evaluation_assess
+    set ce_id = #{ceId,jdbcType=VARCHAR},
+      cea_min = #{ceaMin,jdbcType=INTEGER},
+      cea_max = #{ceaMax,jdbcType=INTEGER},
+      cea_desc = #{ceaDesc,jdbcType=VARCHAR}
+    where cea_id = #{ceaId,jdbcType=VARCHAR}
+  </update>
+</mapper>

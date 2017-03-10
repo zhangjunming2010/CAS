@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinymore.cas.dao.MEvaluationRelationMapper">
+	<resultMap id="BaseResultMap" type="com.tinymore.cas.model.MEvaluationRelationKey">
+		<id column="ce_id" jdbcType="VARCHAR" property="ceId" />
+		<id column="cq_id" jdbcType="VARCHAR" property="cqId" />
+	</resultMap>
+	<resultMap id="QuestionResultMap" type="com.tinymore.cas.model.MQuestion">
+		<id column="cq_id" jdbcType="VARCHAR" property="cqId" />
+		<result column="ct_id" jdbcType="VARCHAR" property="ctId" />
+		<result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+		<result column="cq_title" jdbcType="VARCHAR" property="cqTitle" />
+	</resultMap>
+	<select id="selectRelationQuestions" parameterType="java.lang.String"
+		resultMap="QuestionResultMap">
+		select b.cq_id,b.cq_title,b.cc_id,b.ct_id
+		from evaluation_question a , cas_question b
+		where a.cq_id = b.cq_id
+		and
+		a.ce_id = #{ceId,jdbcType=VARCHAR}
+		order by b.cq_title
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="com.tinymore.cas.model.MEvaluationRelationKey">
+		delete from
+		evaluation_question
+		where ce_id = #{ceId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.tinymore.cas.model.MEvaluationRelationKey">
+		insert into
+		evaluation_question (ce_id, cq_id)
+		values (#{ceId,jdbcType=VARCHAR},
+		#{cqId,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tinymore.cas.model.MEvaluationRelationKey">
+		insert into evaluation_question
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ceId != null">
+				ce_id,
+			</if>
+			<if test="cqId != null">
+				cq_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ceId != null">
+				#{ceId,jdbcType=VARCHAR},
+			</if>
+			<if test="cqId != null">
+				#{cqId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+</mapper>

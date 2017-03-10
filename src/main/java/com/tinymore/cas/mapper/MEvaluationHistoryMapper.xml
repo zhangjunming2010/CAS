@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinymore.cas.dao.MEvaluationHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.tinymore.cas.model.MEvaluationHistory">
+    <id column="ceh_id" jdbcType="VARCHAR" property="cehId" />
+    <result column="cu_id" jdbcType="VARCHAR" property="cuId" />
+    <result column="ceh_title" jdbcType="VARCHAR" property="cehTitle" />
+    <result column="ceh_status" jdbcType="BIT" property="cehStatus" />
+    <result column="ceh_date" jdbcType="VARCHAR" property="cehDate" />
+    <result column="ceh_score" jdbcType="INTEGER" property="cehScore" />
+    <result column="ceh_desc" jdbcType="VARCHAR" property="cehDesc" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.tinymore.cas.model.MEvaluationHistory">
+    <result column="ceh_options" jdbcType="LONGVARCHAR" property="cehOptions" />
+  </resultMap>
+  <resultMap id="OneToOneResultMap" type="com.tinymore.cas.model.MEvaluationHistory">
+    <id column="ceh_id" jdbcType="VARCHAR" property="cehId" />
+    <result column="cu_id" jdbcType="VARCHAR" property="cuId" />
+    <result column="ceh_title" jdbcType="VARCHAR" property="cehTitle" />
+    <result column="ceh_date" jdbcType="VARCHAR" property="cehDate" />
+    <result column="ceh_score" jdbcType="INTEGER" property="cehScore" />
+    <result column="ceh_desc" jdbcType="VARCHAR" property="cehDesc" />
+    <association property="user" javaType="com.tinymore.cas.model.MUser">   
+        <id column="cu_id" jdbcType="VARCHAR" property="cuId" />
+	    <result column="cu_account" jdbcType="VARCHAR" property="cuAccount" />
+	    <result column="cu_password" jdbcType="VARCHAR" property="cuPassword" />
+	    <result column="cu_type" jdbcType="VARCHAR" property="cuType" />
+	    <result column="cu_email" jdbcType="VARCHAR" property="cuEmail" />
+	    <result column="cu_status" jdbcType="BIT" property="cuStatus" />
+	    <result column="cu_role" jdbcType="INTEGER" property="cuRole" />
+	    <result column="cu_name" jdbcType="VARCHAR" property="cuName" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    ceh_id, cu_id, ceh_title, ceh_status, ceh_date, ceh_score, ceh_desc
+  </sql>
+  <sql id="Blob_Column_List">
+    ceh_options
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from cas_evaluation_history
+    where ceh_id = #{cehId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCuId" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from cas_evaluation_history
+    where 1=1
+    <if test="cuId != 'ALL'">
+       and cu_id = #{cuId,jdbcType=VARCHAR}
+    </if>
+    ORDER BY ceh_date desc
+  </select>
+  <select id="selectByAccount" parameterType="java.lang.String" resultMap="OneToOneResultMap">
+    select 
+   		*
+    from cas_evaluation_history a,cas_user b
+    where a.cu_id = b.cu_id 
+    <if test="cuAccount != 'ALL'">
+     	and b.cu_account = #{cuAccount,jdbcType=VARCHAR}
+    </if>
+    ORDER BY ceh_date desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cas_evaluation_history
+    where ceh_id = #{cehId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByCuId" parameterType="java.lang.String">
+    delete from cas_evaluation_history
+    where cu_id = #{cuId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tinymore.cas.model.MEvaluationHistory">
+    insert into cas_evaluation_history (ceh_id, cu_id, 
+      ceh_title, ceh_status, ceh_date, 
+      ceh_score, ceh_desc, ceh_options
+      )
+    values (#{cehId,jdbcType=VARCHAR}, #{cuId,jdbcType=VARCHAR}, 
+      #{cehTitle,jdbcType=VARCHAR}, #{cehStatus,jdbcType=BIT}, #{cehDate,jdbcType=VARCHAR}, 
+      #{cehScore,jdbcType=INTEGER}, #{cehDesc,jdbcType=VARCHAR}, #{cehOptions,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tinymore.cas.model.MEvaluationHistory">
+    insert into cas_evaluation_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cehId != null">
+        ceh_id,
+      </if>
+      <if test="cuId != null">
+        cu_id,
+      </if>
+      <if test="cehTitle != null">
+        ceh_title,
+      </if>
+      <if test="cehStatus != null">
+        ceh_status,
+      </if>
+      <if test="cehDate != null">
+        ceh_date,
+      </if>
+      <if test="cehScore != null">
+        ceh_score,
+      </if>
+      <if test="cehDesc != null">
+        ceh_desc,
+      </if>
+      <if test="cehOptions != null">
+        ceh_options,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cehId != null">
+        #{cehId,jdbcType=VARCHAR},
+      </if>
+      <if test="cuId != null">
+        #{cuId,jdbcType=VARCHAR},
+      </if>
+      <if test="cehTitle != null">
+        #{cehTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="cehStatus != null">
+        #{cehStatus,jdbcType=BIT},
+      </if>
+      <if test="cehDate != null">
+        #{cehDate,jdbcType=VARCHAR},
+      </if>
+      <if test="cehScore != null">
+        #{cehScore,jdbcType=INTEGER},
+      </if>
+      <if test="cehDesc != null">
+        #{cehDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="cehOptions != null">
+        #{cehOptions,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tinymore.cas.model.MEvaluationHistory">
+    update cas_evaluation_history
+    <set>
+      <if test="cuId != null">
+        cu_id = #{cuId,jdbcType=VARCHAR},
+      </if>
+      <if test="cehTitle != null">
+        ceh_title = #{cehTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="cehStatus != null">
+        ceh_status = #{cehStatus,jdbcType=BIT},
+      </if>
+      <if test="cehDate != null">
+        ceh_date = #{cehDate,jdbcType=VARCHAR},
+      </if>
+      <if test="cehScore != null">
+        ceh_score = #{cehScore,jdbcType=INTEGER},
+      </if>
+      <if test="cehDesc != null">
+        ceh_desc = #{cehDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="cehOptions != null">
+        ceh_options = #{cehOptions,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ceh_id = #{cehId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.tinymore.cas.model.MEvaluationHistory">
+    update cas_evaluation_history
+    set cu_id = #{cuId,jdbcType=VARCHAR},
+      ceh_title = #{cehTitle,jdbcType=VARCHAR},
+      ceh_status = #{cehStatus,jdbcType=BIT},
+      ceh_date = #{cehDate,jdbcType=VARCHAR},
+      ceh_score = #{cehScore,jdbcType=INTEGER},
+      ceh_desc = #{cehDesc,jdbcType=VARCHAR},
+      ceh_options = #{cehOptions,jdbcType=LONGVARCHAR}
+    where ceh_id = #{cehId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tinymore.cas.model.MEvaluationHistory">
+    update cas_evaluation_history
+    set cu_id = #{cuId,jdbcType=VARCHAR},
+      ceh_title = #{cehTitle,jdbcType=VARCHAR},
+      ceh_status = #{cehStatus,jdbcType=BIT},
+      ceh_date = #{cehDate,jdbcType=VARCHAR},
+      ceh_score = #{cehScore,jdbcType=INTEGER},
+      ceh_desc = #{cehDesc,jdbcType=VARCHAR}
+    where ceh_id = #{cehId,jdbcType=VARCHAR}
+  </update>
+</mapper>
