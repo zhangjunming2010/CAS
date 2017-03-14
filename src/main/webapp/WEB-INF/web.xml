@@ -3,7 +3,8 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
-	<display-name>Assessment_System</display-name>
+	<display-name>CAS</display-name>
+	<!-- spring配置文件 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring.xml</param-value>
@@ -46,14 +47,4 @@
 		<servlet-name>SpringMVC</servlet-name>
 		<url-pattern>/index</url-pattern>
 	</servlet-mapping>
-	<!-- 
-	<filter>
-	  <filter-name>cors</filter-name>
-	  <filter-class>com.tinymore.cas.utils.CORSFilter</filter-class>
-	</filter>
-	<filter-mapping>
-	  <filter-name>cors</filter-name>
-	  <url-pattern>/*</url-pattern>
-	</filter-mapping> -->
-	
 </web-app>
