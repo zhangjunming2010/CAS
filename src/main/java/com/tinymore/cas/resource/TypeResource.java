@@ -2,6 +2,8 @@ package com.tinymore.cas.resource;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +26,8 @@ import com.tinymore.cas.utils.BaseUtil;
 @CrossOrigin(origins="*")
 public class TypeResource {
 	
+	private static final Logger log = (Logger) LogManager.getLogger(TypeResource.class);
+	
 	@Autowired
 	private IType service;
 	@Autowired
@@ -44,6 +48,9 @@ public class TypeResource {
 			int count = service.addType(Type);
 			if(count > 0) {
 				code = "0";
+				log.info("新增类型："+ctName+"成功！");
+			}else {
+				log.info("新增类型："+ctName+"失败，该类型已存在！");
 			}
 		}
 		obj.put("code", code);
@@ -60,6 +67,9 @@ public class TypeResource {
 			int count = service.updateType(record);
 			if(count > 0) {
 				code = "0";
+				log.info("更新类型："+record.getCtName()+"成功！");
+			}else {
+				log.info("更新类型："+record.getCtName()+"失败，该类型已存在！");
 			}
 		}
 		obj.put("code", code);
@@ -69,7 +79,9 @@ public class TypeResource {
 	@RequestMapping(value = "/list",method = RequestMethod.POST,produces="application/json; charset=utf-8")
 	@ResponseBody
 	public List<MType> getTypeList(@RequestBody String searchKey){
-		return service.getTypeListByParams(searchKey);
+		List<MType> types = service.getTypeListByParams(searchKey);
+		log.info(JSON.toJSON(types));
+		return types;
 	}
 	
 	@RequestMapping(value = "/delete",method = RequestMethod.POST,produces="application/json; charset=utf-8")
@@ -85,6 +97,7 @@ public class TypeResource {
 		int count = service.delType(record.getCtId());
 		if(count > 0) {
 			code = "0";
+			log.info("删除类型："+record.getCtName()+"成功！");
 		}
 		obj.put("code", code);
 		return JSON.toJSONString(obj);

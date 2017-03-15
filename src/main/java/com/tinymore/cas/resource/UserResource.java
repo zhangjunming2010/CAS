@@ -2,6 +2,8 @@ package com.tinymore.cas.resource;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +24,8 @@ import com.tinymore.cas.utils.BaseUtil;
 @RequestMapping("/user")
 @CrossOrigin(origins="*")
 public class UserResource {
+	
+	private static final Logger log = (Logger) LogManager.getLogger(UserResource.class);
 
 	@Autowired
 	private IUser service;
@@ -56,6 +60,7 @@ public class UserResource {
 		}
 		ret.put("code", code);
 		ret.put("data", data);
+		log.info(JSON.toJSONString(ret));
 		return JSON.toJSONString(ret);
 	}
 	
@@ -90,6 +95,7 @@ public class UserResource {
 		}
 		ret.put("code", code);
 		ret.put("data", data);
+		log.info(JSON.toJSONString(ret));
 		return JSON.toJSONString(ret);
 	}
 	
@@ -128,25 +134,31 @@ public class UserResource {
 		}
 		ret.put("code", code);
 		ret.put("data", data);
+		log.info(JSON.toJSONString(ret));
 		return JSON.toJSONString(ret);
 	}
 	
 	@RequestMapping(value = "/list",method = RequestMethod.POST,produces="application/json; charset=utf-8")
 	@ResponseBody
 	public List<MUser> getUserList(@RequestBody String params){
-		return service.selectByParams(params);
+		List<MUser> users =  service.selectByParams(params);
+		log.info(JSON.toJSON(users));
+		return users;
 	}
 	
 	@RequestMapping(value = "/detail",method = RequestMethod.POST,produces="application/json; charset=utf-8")
 	@ResponseBody
 	public MUser getUser(@RequestBody String cuAccount){
-		return service.selectByAccount(cuAccount);
+		MUser user = service.selectByAccount(cuAccount);
+		log.info(JSON.toJSON(user));
+		return user;
 	}
 
 	@RequestMapping(value = "/delete",method = RequestMethod.POST,produces="application/json; charset=utf-8")
 	@ResponseBody
 	public int delUser(@RequestBody String cuId){
 		ieh.delEvaluationHistoryByCuId(cuId);
+		log.info(cuId+"关联用户及关联测评记录历史被删除！");
 		return service.delUser(cuId);
 	}
 	
@@ -170,6 +182,7 @@ public class UserResource {
 		}
 		ret.put("code", code);
 		ret.put("data", data);
+		log.info(JSON.toJSONString(ret));
 		return JSON.toJSONString(ret);
 	}
 	

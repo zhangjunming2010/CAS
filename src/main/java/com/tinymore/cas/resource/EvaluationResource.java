@@ -2,6 +2,8 @@ package com.tinymore.cas.resource;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +27,8 @@ import com.tinymore.cas.utils.BaseUtil;
 @RequestMapping("/evaluation")
 @CrossOrigin(origins="*")
 public class EvaluationResource {
+	
+	private static final Logger log = (Logger) LogManager.getLogger(EvaluationResource.class);
 	
 	@Autowired
 	private IEvaluation service;
@@ -74,7 +78,9 @@ public class EvaluationResource {
 		JSONObject obj = JSON.parseObject(params);
 		String ceTitle = obj.getString("ceTitle");
 		int ceStatus = obj.getInteger("ceStatus");
-		return service.getEvaluationByParams(ceTitle, ceStatus);
+		List<MEvaluation> evaluations = service.getEvaluationByParams(ceTitle, ceStatus);
+		log.info(JSON.toJSON(evaluations));
+		return evaluations;
 	}
 	
 	@RequestMapping(value = "/delete",method = RequestMethod.POST,produces="application/json; charset=utf-8")

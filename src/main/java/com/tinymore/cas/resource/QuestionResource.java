@@ -2,6 +2,8 @@ package com.tinymore.cas.resource;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,6 +25,8 @@ import com.tinymore.cas.utils.BaseUtil;
 @RequestMapping("/question")
 @CrossOrigin(origins="*")
 public class QuestionResource {
+	
+	private static final Logger log = (Logger) LogManager.getLogger(QuestionResource.class);
 	
 	@Autowired
 	private IQuestion service;
@@ -73,6 +77,7 @@ public class QuestionResource {
 		}
 		obj.put("code", code);
 		obj.put("data", data);
+		log.info(JSON.toJSON(obj));
 		return JSON.toJSONString(obj);
 	}
 	
@@ -83,7 +88,9 @@ public class QuestionResource {
 		String searchKey = obj.getString("searchKey");
 		String ccId = obj.getString("ccId");
 		String ctId = obj.getString("ctId");
-		return service.getQuestionListByParams(searchKey, ccId, ctId);
+		List<MQuestion> questions =  service.getQuestionListByParams(searchKey, ccId, ctId);
+		log.info(JSON.toJSON(questions));
+		return questions;
 	}
 	
 	@RequestMapping(value = "/delete",method = RequestMethod.POST,produces="application/json; charset=utf-8")
@@ -102,6 +109,7 @@ public class QuestionResource {
 		}
 		obj.put("code", code);
 		obj.put("data", data);
+		log.info(JSON.toJSON(obj));
 		return JSON.toJSONString(obj);
 	}
 	
@@ -157,6 +165,7 @@ public class QuestionResource {
 		}
 		obj.put("code", code);
 		obj.put("data", data);
+		log.info(JSON.toJSON(obj));
 		return JSON.toJSONString(obj);
 	}
 

@@ -2,6 +2,8 @@ package com.tinymore.cas.resource;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,6 +25,8 @@ import com.tinymore.cas.utils.BaseUtil;
 @RequestMapping("/category")
 @CrossOrigin(origins="*")
 public class CategoryResource {
+	
+	private static final Logger log = (Logger) LogManager.getLogger(EvaluationAssessResource.class);
 	
 	@Autowired
 	private ICategory service;
@@ -69,7 +73,9 @@ public class CategoryResource {
 	@RequestMapping(value = "/list",method = RequestMethod.POST,produces="application/json; charset=utf-8")
 	@ResponseBody
 	public List<MCategory> getCategoryList(@RequestBody String searchKey){
-		return service.getCategoryListByParams(searchKey);
+		List<MCategory> categories = service.getCategoryListByParams(searchKey);
+		log.info(JSON.toJSON(categories));
+		return categories;
 	}
 	
 	@RequestMapping(value = "/delete",method = RequestMethod.POST,produces="application/json; charset=utf-8")

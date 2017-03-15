@@ -2,6 +2,8 @@ package com.tinymore.cas.resource;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +23,8 @@ import com.tinymore.cas.service.IEvaluationRelation;
 @RequestMapping("/evaluationrelation")
 @CrossOrigin(origins="*")
 public class EvaluationRelationResource {
+	
+	private static final Logger log = (Logger) LogManager.getLogger(EvaluationRelationResource.class);
 	
 	@Autowired
 	private IEvaluationRelation service;
@@ -55,6 +59,7 @@ public class EvaluationRelationResource {
 		relation.setCeId(ceId);
 		relation.setCqId(cqId);
 		List<MQuestion> questions = service.getRelationQuestions(relation);
+		log.info(JSON.toJSON(questions));
 		return questions;
 	}
 }

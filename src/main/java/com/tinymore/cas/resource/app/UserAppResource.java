@@ -2,6 +2,8 @@ package com.tinymore.cas.resource.app;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +23,7 @@ import com.tinymore.cas.utils.BaseUtil;
 @CrossOrigin(origins="*")
 public class UserAppResource {
 
+	private static final Logger log = (Logger) LogManager.getLogger(UserAppResource.class);
 
 	@Autowired
 	private IUser service;
@@ -52,6 +55,7 @@ public class UserAppResource {
 		}
 		ret.put("code", code);
 		ret.put("data", data);
+		log.info(JSON.toJSONString(ret));
 		return JSON.toJSONString(ret);
 	}
 	
@@ -85,6 +89,7 @@ public class UserAppResource {
 		}
 		ret.put("code", code);
 		ret.put("data", data);
+		log.info(JSON.toJSONString(ret));
 		return JSON.toJSONString(ret);
 	}
 	
@@ -122,6 +127,7 @@ public class UserAppResource {
 		}
 		ret.put("code", code);
 		ret.put("data", data);
+		log.info(JSON.toJSONString(ret));
 		return JSON.toJSONString(ret);
 	}
 

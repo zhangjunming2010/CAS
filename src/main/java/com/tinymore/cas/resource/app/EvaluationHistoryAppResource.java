@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,6 +28,8 @@ import com.tinymore.cas.utils.BaseUtil;
 @RequestMapping("/app/evaluationhistory")
 @CrossOrigin(origins="*")
 public class EvaluationHistoryAppResource {
+	
+	private static final Logger log = (Logger) LogManager.getLogger(EvaluationHistoryAppResource.class);
 	
 	@Autowired
 	private IEvaluationHistory service;
@@ -83,6 +87,7 @@ public class EvaluationHistoryAppResource {
 		}
 		ret.put("code", code);
 		ret.put("data", data);
+		log.info(JSON.toJSONString(ret));
 		return JSON.toJSONString(ret);
 	}
 	
@@ -91,6 +96,7 @@ public class EvaluationHistoryAppResource {
 	public List<MEvaluationHistory> getEvaluationHistoryList(HttpServletRequest params){
 		String cuId = params.getParameter("cuId");
 		List<MEvaluationHistory> arr = service.getEvaluationHistoryByCuId(cuId);
+		log.info(JSON.toJSONString(arr));
 		return arr;
 	}
 	
@@ -98,6 +104,8 @@ public class EvaluationHistoryAppResource {
 	@ResponseBody
 	public MEvaluationHistory getEvaluationHistoryByCehId(HttpServletRequest params){
 		String cehId = params.getParameter("cehId");
-		return service.getEvaluationHistoryByPrimaryKey(cehId);
+		MEvaluationHistory history = service.getEvaluationHistoryByPrimaryKey(cehId);
+		log.info(JSON.toJSONString(history));
+		return history;
 	}
 }
