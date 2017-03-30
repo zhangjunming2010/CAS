@@ -103,7 +103,7 @@ http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
         </tx:attributes>
     </tx:advice>
     <aop:config>
-        <aop:pointcut id="transactionPointcut" expression="execution(* com.as.service..*Impl.*(..))" />
+        <aop:pointcut id="transactionPointcut" expression="execution(* com.cas.service..*Impl.*(..))" />
         <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice" />
     </aop:config>
 
